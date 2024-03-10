@@ -30,11 +30,6 @@ jobs:
           rm -rf /usr/share/dotnet/
           rm -rf /opt/hostedtoolcache
           df -h
-      - name: Install Sudo
-        run: sudo apt update && sudo apt install sudo -y
-
-      - name: Install some packages
-        run: sudo apt install git -y
 
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
@@ -47,18 +42,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         
-      - name: Build Linux Kernel
+      - name: Run command in container
         run: |
-          mv debian.d debian
-          mv config.conf .conf
-          sudo apt build-dep ./
-          debbuild -us -uc -b
-          rm -v ../*dbg*.deb
-          mkdir artifact
-          mv ../*.deb artifact/
-          tar -zcvf BuiltDeb.tar.gz ./artifact
+          docker run --rm \
+          -v ${{ github.workspace }}:${{ github.workspace }} \
+          -w ${{ github.workspace }} \
+          ubuntu:noble \
+          /bin/bash -c "apt update && apt install git && mv debian.d debian && mv config.conf .conf && apt build-dep ./ && debbuild -us -uc -b && rm -v ../*dbg*.deb && mkdir artifact && mv ../*.deb artifact/ && tar -zcvf BuiltDeb.tar.gz ./artifact"
           
-
       - uses: actions/upload-artifact@v4
         with:
           name: LingmoOS Kernel Built
