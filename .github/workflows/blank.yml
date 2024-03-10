@@ -48,7 +48,7 @@ jobs:
           -v ${{ github.workspace }}:${{ github.workspace }} \
           -w ${{ github.workspace }} \
           ubuntu:noble \
-          /bin/bash -c "apt update && apt install git && mv debian.d debian && mv config.conf .conf && apt build-dep ./ && debbuild -us -uc -b && rm -v ../*dbg*.deb && mkdir artifact && mv ../*.deb artifact/ && tar -zcvf BuiltDeb.tar.gz ./artifact"
+          /bin/bash -c "pwd && apt update && apt install -y git && mv debian.d debian && mv config.conf .conf && apt -y build-dep ./ && debbuild -us -uc -b && rm -v ../*dbg*.deb && mkdir artifact && mv ../*.deb artifact/ && tar -zcvf BuiltDeb.tar.gz ./artifact"
           
       - uses: actions/upload-artifact@v4
         with:
