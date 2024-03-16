@@ -52,4 +52,5 @@ jobs:
         name: ${{ matrix.job-name }}~${{ github.sha }}
         path: |
           assets/**
+          !assets/*dbg*
         if-no-files-found: error
