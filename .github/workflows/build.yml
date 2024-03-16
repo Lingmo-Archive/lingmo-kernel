@@ -31,6 +31,7 @@ jobs:
         image: docker.io/library/debian:trixie-slim
         options: -v ${{ github.workspace }}:/work
         run: |
+          git config --global --add safe.directory /work
           cd /work
           apt update; apt install -y --no-install-recommends fakeroot build-essential git wget openssl libssl-dev ca-certificates libncurses-dev zstd xz-utils flex libelf-dev bison bc debhelper rsync kmod cpio gpg pahole python3
           openssl req -new -nodes -utf8 -sha512 -days 36500 -batch -x509 -config certs/default_x509.genkey -outform DER -out certs/signing_key.x509 -keyout certs/signing_key.pem
