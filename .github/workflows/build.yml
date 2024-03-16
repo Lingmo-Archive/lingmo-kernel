@@ -40,7 +40,7 @@ jobs:
           export git=$(git rev-parse --short=7 HEAD)
           export dv=$(git show -s --date=format:'%Y%m%d' --format=%cd)
           export jobs=$((2*$(nproc))); echo $jobs
-          pvcmd="cat CONFIGS/xanmod/gcc/config_${{ matrix.psabi }} | grep 'LOCALVERSION='" && export pv=$(eval $pvcmd | cut -d'"' -f2)
+          pvcmd="cat CONFIG/lingmo/gcc/config_${{ matrix.psabi }} | grep 'LOCALVERSION='" && export pv=$(eval $pvcmd | cut -d'"' -f2)
           mvcmd="make -j$jobs CC='gcc-13' HOSTCC='gcc-13' KDEB_PKGVERSION='$lv$pv$xv-$rv~$dv.g$git' bindeb-pkg 2>&1 | tee ../build-$lv$pv$xv-$rv~$dv.g$git_amd64.log && xz -e9 ../build-*$pv*"
           avcmd="mkdir -p assets/ && mv ../*$pv* assets/"
           eval $mvcmd && eval $avcmd
